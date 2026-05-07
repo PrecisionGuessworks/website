@@ -549,12 +549,43 @@
     text-align: center;
     margin-bottom: 32px;
   }
+  .logo-tier {
+    margin-bottom: 40px;
+  }
+  .logo-tier:last-child { margin-bottom: 0; }
+  .logo-tier-label {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
   .logo-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 32px;
+    align-items: center;
+    gap: 40px;
   }
+  /* Tiered logo sizes — higher tiers display larger */
+  .logo-grid img,
+  .logo-placeholder {
+    object-fit: contain;
+    background: transparent;
+  }
+  .logo-grid--strategic img,
+  .logo-grid--strategic .logo-placeholder { max-height: 110px; max-width: 260px; }
+  .logo-grid--platinum  img,
+  .logo-grid--platinum  .logo-placeholder { max-height: 90px;  max-width: 220px; }
+  .logo-grid--gold      img,
+  .logo-grid--gold      .logo-placeholder { max-height: 72px;  max-width: 180px; }
+  .logo-grid--silver    img,
+  .logo-grid--silver    .logo-placeholder { max-height: 58px;  max-width: 150px; }
+  .logo-grid--bronze    img,
+  .logo-grid--bronze    .logo-placeholder { max-height: 46px;  max-width: 125px; }
+
   .logo-placeholder {
     width: 140px;
     height: 60px;
@@ -837,7 +868,7 @@
       <li><a href="#outreach">Outreach</a></li>
       <li><a href="#sponsors">Sponsors</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="https://square.link/YOUR-LINK-HERE" class="nav-cta" target="_blank" rel="noopener">Donate</a></li>
+      <li><a href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX" class="nav-cta" target="_blank" rel="noopener">Donate</a></li>
       <li><a href="#" class="nav-login">Login</a></li>
     </ul>
   </div>
@@ -1094,19 +1125,48 @@
 
     <div class="sponsor-logos">
       <h3>Current Sponsors</h3>
-      <div class="logo-grid">
-        <div class="logo-placeholder">Sponsor 1</div>
-        <div class="logo-placeholder">Sponsor 2</div>
-        <div class="logo-placeholder">Sponsor 3</div>
-        <div class="logo-placeholder">Sponsor 4</div>
-        <div class="logo-placeholder">Sponsor 5</div>
-        <div class="logo-placeholder">Sponsor 6</div>
+
+      <!-- Drop SVGs or transparent PNGs into images/sponsors/<tier>/ then add an <img> below. -->
+
+      <div class="logo-tier">
+        <div class="logo-tier-label">Strategic Partners</div>
+        <div class="logo-grid logo-grid--strategic">
+          <!-- e.g. <img src="images/sponsors/strategic/example.svg" alt="Example"> -->
+        </div>
+      </div>
+
+      <div class="logo-tier">
+        <div class="logo-tier-label">Platinum</div>
+        <div class="logo-grid logo-grid--platinum">
+          <!-- <img src="images/sponsors/platinum/example.svg" alt="Example"> -->
+        </div>
+      </div>
+
+      <div class="logo-tier">
+        <div class="logo-tier-label">Gold</div>
+        <div class="logo-grid logo-grid--gold">
+          <!-- <img src="images/sponsors/gold/example.svg" alt="Example"> -->
+        </div>
+      </div>
+
+      <div class="logo-tier">
+        <div class="logo-tier-label">Silver</div>
+        <div class="logo-grid logo-grid--silver">
+          <!-- <img src="images/sponsors/silver/example.svg" alt="Example"> -->
+        </div>
+      </div>
+
+      <div class="logo-tier">
+        <div class="logo-tier-label">Bronze</div>
+        <div class="logo-grid logo-grid--bronze">
+          <!-- <img src="images/sponsors/bronze/example.svg" alt="Example"> -->
+        </div>
       </div>
     </div>
 
     <div class="sponsor-cta">
       <p>Interested in supporting the next generation of engineers?</p>
-      <a href="https://square.link/YOUR-LINK-HERE" class="btn btn-primary" target="_blank" rel="noopener">Donate Now</a>
+      <a href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX" class="btn btn-primary" target="_blank" rel="noopener">Donate Now</a>
       &nbsp;&nbsp;
       <a href="#contact" class="btn btn-outline">Contact Us</a>
     </div>
