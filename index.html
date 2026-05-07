@@ -1,1292 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Precision Guessworks — FIRST Team 1646</title>
-<meta name="description" content="FIRST Team 1646, Precision Guessworks, is a FIRST Robotics Competition team from Lafayette, Indiana. State Championship EI Award winners and World Championship competitors.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-<style>
-  /* ============================================================
-     CSS CUSTOM PROPERTIES — 1646 Brand Palette
-     ============================================================ */
-  :root {
-    --red: #9e0001;
-    --red-75: rgba(158, 0, 1, 0.75);
-    --red-50: rgba(158, 0, 1, 0.50);
-    --red-25: rgba(158, 0, 1, 0.25);
-    --black: #000000;
-    --gray-900: #222222;
-    --gray-800: #3a3a3c;
-    --gray-700: #4f5050;
-    --gray-500: #747474;
-    --gray-400: #929292;
-    --gray-300: #bdbec0;
-    --gray-200: #d4d4d4;
-    --white: #ffffff;
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision Guessworks — FIRST Team 1646</title>
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png"
+      sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180"
+      href="/images/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+    <meta name="description"
+      content="FIRST Team 1646, Precision Guessworks, is a FIRST Robotics Competition team from Lafayette, Indiana. State Championship EI Award winners and World Championship competitors.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
 
-    --font-heading: 'Bebas Neue', 'Impact', sans-serif;
-    /* Glacial Indifference fallback chain */
-    --font-body: 'Glacial Indifference', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-
-    --max-width: 1200px;
-    --section-pad: 100px;
-  }
-
-  /* Glacial Indifference — self-hosted would be ideal, using system fallback for now */
-  @font-face {
-    font-family: 'Glacial Indifference';
-    src: url('fonts/GlacialIndifference-Regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'Glacial Indifference';
-    src: url('fonts/GlacialIndifference-Bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  /* ============================================================
-     RESET & BASE
-     ============================================================ */
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-  body {
-    font-family: var(--font-body);
-    background: var(--gray-900);
-    color: var(--gray-200);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-  img { max-width: 100%; display: block; }
-  a { color: inherit; text-decoration: none; }
-
-  /* ============================================================
-     NAVIGATION
-     ============================================================ */
-  .nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--gray-800);
-  }
-  .nav-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-logo {
-    font-family: var(--font-heading);
-    font-size: 28px;
-    color: var(--white);
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .nav-logo .num { color: var(--red); }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: var(--font-heading);
-    font-size: 15px;
-    letter-spacing: 1.5px;
-    color: var(--gray-400);
-    transition: color 0.25s;
-    text-transform: uppercase;
-  }
-  .nav-links a:hover { color: var(--white); }
-  .nav-cta {
-    background: var(--red);
-    color: var(--white) !important;
-    padding: 8px 20px;
-    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-    transition: background 0.25s;
-  }
-  .nav-cta:hover { background: var(--red-75); }
-  .nav-login {
-    border: 1px solid var(--gray-700);
-    padding: 6px 16px;
-    transition: border-color 0.25s, color 0.25s;
-  }
-  .nav-login:hover { border-color: var(--gray-400); color: var(--white); }
-
-  /* Mobile hamburger */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--gray-300);
-    transition: transform 0.3s, opacity 0.3s;
-  }
-
-  /* ============================================================
-     HERO
-     ============================================================ */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    background: var(--black);
-  }
-  /* Geometric layered background */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(135deg, var(--red-25) 0%, transparent 50%),
-      linear-gradient(225deg, rgba(58,58,60,0.6) 0%, transparent 40%),
-      linear-gradient(315deg, var(--red-50) 0%, transparent 35%);
-    z-index: 1;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 200px;
-    background: linear-gradient(to top, var(--gray-900), transparent);
-    z-index: 2;
-  }
-  /* Decorative geometric shapes */
-  .hero-geo {
-    position: absolute;
-    z-index: 1;
-    opacity: 0.12;
-  }
-  .hero-geo-1 {
-    top: -80px; right: -120px;
-    width: 600px; height: 600px;
-    border: 2px solid var(--red);
-    transform: rotate(25deg);
-  }
-  .hero-geo-2 {
-    bottom: 100px; left: -60px;
-    width: 300px; height: 300px;
-    background: var(--red);
-    transform: rotate(45deg);
-    opacity: 0.06;
-  }
-  .hero-geo-3 {
-    top: 30%; right: 15%;
-    width: 1px; height: 400px;
-    background: var(--red);
-    transform: rotate(-30deg);
-    opacity: 0.3;
-  }
-  /* Photo placeholder */
-  .hero-image {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  .hero-image-placeholder {
-    width: 100%;
-    height: 100%;
-    background: var(--gray-900);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-body);
-    color: var(--gray-700);
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 3;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 120px 24px 80px;
-  }
-  .hero-tag {
-    font-family: var(--font-heading);
-    font-size: 14px;
-    letter-spacing: 4px;
-    color: var(--red);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .hero h1 {
-    font-family: var(--font-heading);
-    font-size: clamp(56px, 8vw, 110px);
-    line-height: 0.95;
-    color: var(--white);
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-  }
-  .hero h1 .accent { color: var(--red); }
-  .hero-sub {
-    font-size: 18px;
-    color: var(--gray-300);
-    max-width: 520px;
-    margin-bottom: 12px;
-    line-height: 1.7;
-  }
-  .hero-awards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 32px;
-  }
-  .award-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    background: rgba(158, 0, 1, 0.15);
-    border: 1px solid var(--red-50);
-    font-family: var(--font-heading);
-    font-size: 14px;
-    letter-spacing: 1.5px;
-    color: var(--gray-200);
-    text-transform: uppercase;
-  }
-  .award-badge .dot {
-    width: 6px; height: 6px;
-    background: var(--red);
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  }
-
-  /* ============================================================
-     SECTION SHARED
-     ============================================================ */
-  section { padding: var(--section-pad) 24px; }
-  .section-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-  }
-  .section-label {
-    font-family: var(--font-heading);
-    font-size: 13px;
-    letter-spacing: 4px;
-    color: var(--red);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .section-title {
-    font-family: var(--font-heading);
-    font-size: clamp(36px, 5vw, 56px);
-    color: var(--white);
-    letter-spacing: 1px;
-    line-height: 1.05;
-    margin-bottom: 24px;
-  }
-  .section-body {
-    font-size: 16px;
-    color: var(--gray-300);
-    max-width: 640px;
-    line-height: 1.8;
-  }
-  /* Red divider line — brand element */
-  .red-line {
-    width: 60px;
-    height: 2px;
-    background: var(--red);
-    margin: 32px 0;
-  }
-
-  /* ============================================================
-     ABOUT
-     ============================================================ */
-  #about { background: var(--gray-900); }
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-    margin-top: 48px;
-  }
-  .tenets {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-  .tenet {
-    padding: 24px;
-    background: rgba(34,34,34,0.6);
-    border-left: 3px solid var(--red);
-    transition: background 0.3s;
-  }
-  .tenet:hover { background: rgba(58,58,60,0.4); }
-  .tenet-num {
-    font-family: var(--font-heading);
-    font-size: 13px;
-    letter-spacing: 3px;
-    color: var(--red);
-    margin-bottom: 6px;
-  }
-  .tenet h3 {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    color: var(--white);
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-  .tenet p {
-    font-size: 14px;
-    color: var(--gray-400);
-    line-height: 1.7;
-  }
-  .about-photo {
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: var(--gray-800);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .about-photo::before {
-    content: '';
-    position: absolute;
-    top: -20px; right: -20px;
-    width: 120px; height: 120px;
-    border: 2px solid var(--red-50);
-    transform: rotate(15deg);
-  }
-  .placeholder-label {
-    font-size: 12px;
-    color: var(--gray-700);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  /* ============================================================
-     SEASON HIGHLIGHTS
-     ============================================================ */
-  #season {
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-  }
-  #season::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--red-50), transparent);
-  }
-  .highlights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 32px;
-    margin-top: 48px;
-  }
-  .highlight-card {
-    background: var(--gray-900);
-    border: 1px solid var(--gray-800);
-    overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .highlight-card:hover {
-    border-color: var(--red-50);
-    transform: translateY(-4px);
-  }
-  .highlight-card-image {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: var(--gray-800);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .highlight-card-body {
-    padding: 24px;
-  }
-  .highlight-card-body h3 {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    color: var(--white);
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-  .highlight-card-body p {
-    font-size: 14px;
-    color: var(--gray-400);
-    line-height: 1.7;
-  }
-  .highlight-year {
-    font-family: var(--font-heading);
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: var(--red);
-    margin-bottom: 8px;
-  }
-
-  /* ============================================================
-     OUTREACH
-     ============================================================ */
-  #outreach { background: var(--gray-900); }
-  .outreach-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    margin-top: 48px;
-  }
-  .outreach-item {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .outreach-item-image {
-    width: 100%;
-    aspect-ratio: 16/10;
-    background: var(--gray-800);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .outreach-item h3 {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    color: var(--white);
-    letter-spacing: 1px;
-  }
-  .outreach-item p {
-    font-size: 14px;
-    color: var(--gray-400);
-    line-height: 1.8;
-  }
-
-  /* ============================================================
-     SPONSORS
-     ============================================================ */
-  #sponsors {
-    background: var(--black);
-    position: relative;
-  }
-  #sponsors::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--red-50), transparent);
-  }
-  .sponsor-tiers {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 48px;
-  }
-  .sponsor-tier {
-    padding: 32px 24px;
-    background: var(--gray-900);
-    border: 1px solid var(--gray-800);
-    text-align: center;
-    transition: border-color 0.3s;
-    flex: 0 1 210px;
-    min-width: 190px;
-  }
-  .sponsor-tier:hover { border-color: var(--red-50); }
-  .tier-name {
-    font-family: var(--font-heading);
-    font-size: 20px;
-    color: var(--white);
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-  }
-  .tier-amount {
-    font-family: var(--font-heading);
-    font-size: 14px;
-    letter-spacing: 2px;
-    color: var(--red);
-    margin-bottom: 16px;
-  }
-  .tier-benefits {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .tier-benefits li {
-    font-size: 13px;
-    color: var(--gray-400);
-    line-height: 1.5;
-  }
-  .tier-benefits li::before {
-    content: '— ';
-    color: var(--red);
-  }
-  .sponsor-logos {
-    margin-top: 64px;
-  }
-  .sponsor-logos h3 {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    letter-spacing: 2px;
-    color: var(--gray-500);
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  .logo-tier {
-    margin-bottom: 40px;
-  }
-  .logo-tier:last-child { margin-bottom: 0; }
-  .logo-tier-label {
-    font-family: var(--font-heading);
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: var(--red);
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  .logo-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-  }
-  /* Tiered logo sizes — higher tiers display larger */
-  .logo-grid img,
-  .logo-placeholder {
-    object-fit: contain;
-    background: transparent;
-  }
-  .logo-grid--strategic img,
-  .logo-grid--strategic .logo-placeholder { max-height: 110px; max-width: 260px; }
-  .logo-grid--platinum  img,
-  .logo-grid--platinum  .logo-placeholder { max-height: 90px;  max-width: 220px; }
-  .logo-grid--gold      img,
-  .logo-grid--gold      .logo-placeholder { max-height: 72px;  max-width: 180px; }
-  .logo-grid--silver    img,
-  .logo-grid--silver    .logo-placeholder { max-height: 58px;  max-width: 150px; }
-  .logo-grid--bronze    img,
-  .logo-grid--bronze    .logo-placeholder { max-height: 46px;  max-width: 125px; }
-
-  .logo-placeholder {
-    width: 140px;
-    height: 60px;
-    background: var(--gray-800);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    color: var(--gray-700);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* Text-only sponsor names — sized per tier to match logo presence */
-  .text-sponsor {
-    font-family: var(--font-heading);
-    color: var(--gray-200);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    line-height: 1.1;
-    text-align: center;
-    padding: 0 4px;
-  }
-  .logo-grid--strategic .text-sponsor { font-size: 32px; }
-  .logo-grid--platinum  .text-sponsor { font-size: 26px; }
-  .logo-grid--gold      .text-sponsor { font-size: 22px; }
-  .logo-grid--silver    .text-sponsor { font-size: 18px; letter-spacing: 1.5px; }
-  .logo-grid--bronze    .text-sponsor { font-size: 15px; letter-spacing: 1.5px; }
-
-  .sponsor-cta {
-    margin-top: 48px;
-    text-align: center;
-  }
-  .sponsor-cta p {
-    font-size: 16px;
-    color: var(--gray-400);
-    margin-bottom: 20px;
-  }
-
-  /* ============================================================
-     CONTACT
-     ============================================================ */
-  #contact { background: var(--gray-900); }
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    margin-top: 48px;
-  }
-  .contact-info { display: flex; flex-direction: column; gap: 24px; }
-  .contact-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .contact-icon {
-    width: 36px; height: 36px;
-    background: var(--red-25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--red);
-    font-size: 16px;
-  }
-  .contact-row h4 {
-    font-family: var(--font-heading);
-    font-size: 16px;
-    color: var(--white);
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
-  .contact-row p {
-    font-size: 14px;
-    color: var(--gray-400);
-  }
-  .contact-row a {
-    color: var(--gray-300);
-    transition: color 0.25s;
-  }
-  .contact-row a:hover { color: var(--red); }
-
-  .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group label {
-    font-family: var(--font-heading);
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--gray-500);
-    text-transform: uppercase;
-  }
-  .form-group input,
-  .form-group textarea {
-    background: var(--black);
-    border: 1px solid var(--gray-800);
-    padding: 12px 16px;
-    color: var(--gray-200);
-    font-family: var(--font-body);
-    font-size: 14px;
-    transition: border-color 0.25s;
-    outline: none;
-  }
-  .form-group input:focus,
-  .form-group textarea:focus {
-    border-color: var(--red-50);
-  }
-  .form-group textarea { resize: vertical; min-height: 120px; }
-
-  /* ============================================================
-     BUTTONS
-     ============================================================ */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-heading);
-    font-size: 15px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 14px 32px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.25s;
-  }
-  .btn-primary {
-    background: var(--red);
-    color: var(--white);
-    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  }
-  .btn-primary:hover { background: var(--red-75); }
-  .btn-outline {
-    background: transparent;
-    color: var(--gray-200);
-    border: 1px solid var(--gray-700);
-  }
-  .btn-outline:hover { border-color: var(--gray-400); color: var(--white); }
-
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-  .footer {
-    background: var(--black);
-    border-top: 1px solid var(--gray-800);
-    padding: 48px 24px;
-  }
-  .footer-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-  .footer-brand {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    color: var(--gray-500);
-    letter-spacing: 2px;
-  }
-  .footer-brand .red { color: var(--red); }
-  .footer-social {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-  }
-  .footer-social a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; height: 40px;
-    border: 1px solid var(--gray-800);
-    color: var(--gray-500);
-    font-size: 14px;
-    transition: border-color 0.25s, color 0.25s;
-  }
-  .footer-social a:hover {
-    border-color: var(--red-50);
-    color: var(--white);
-  }
-  .footer-info {
-    font-size: 13px;
-    color: var(--gray-700);
-  }
-
-  /* ============================================================
-     IMPACT STATS
-     ============================================================ */
-  .stats-strip {
-    background: var(--black);
-    padding: 64px 24px;
-    position: relative;
-  }
-  .stats-strip::before,
-  .stats-strip::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--red-50), transparent);
-  }
-  .stats-strip::before { top: 0; }
-  .stats-strip::after { bottom: 0; }
-  .stats-grid {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 48px;
-  }
-  .stat {
-    text-align: center;
-    flex: 0 1 160px;
-  }
-  .stat-number {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    color: var(--red);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .stat-label {
-    font-family: var(--font-heading);
-    font-size: 13px;
-    letter-spacing: 2px;
-    color: var(--gray-400);
-    text-transform: uppercase;
-  }
-
-  /* ============================================================
-     RESPONSIVE
-     ============================================================ */
-  @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .nav-links.open {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 72px;
-      left: 0; right: 0;
-      background: rgba(0,0,0,0.96);
-      padding: 24px;
-      gap: 20px;
-      border-bottom: 1px solid var(--gray-800);
-    }
-    .about-grid,
-    .outreach-grid,
-    .contact-grid {
-      grid-template-columns: 1fr;
-    }
-    :root { --section-pad: 64px; }
-  }
-
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 48px; }
-    .highlights-grid { grid-template-columns: 1fr; }
-    .hero-awards { flex-direction: column; }
-  }
-
-  /* ============================================================
-     ANIMATIONS
-     ============================================================ */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-content > * {
-    animation: fadeUp 0.7s ease-out both;
-  }
-  .hero-tag { animation-delay: 0.1s; }
-  .hero h1 { animation-delay: 0.2s; }
-  .hero-sub { animation-delay: 0.35s; }
-  .hero-awards { animation-delay: 0.5s; }
-</style>
-</head>
-<body>
-
-<!-- ====== NAV ====== -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">
-      <span class="num">1646</span> PRECISION GUESSWORKS
-    </a>
-    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#season">Season</a></li>
-      <li><a href="#outreach">Outreach</a></li>
-      <li><a href="#sponsors">Sponsors</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX" class="nav-cta" target="_blank" rel="noopener">Donate</a></li>
-      <li><a href="#" class="nav-login">Login</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- ====== HERO ====== -->
-<section class="hero">
-  <div class="hero-image">
-    <img src="images/team_photo.png" alt="Precision Guessworks Team 1646" style="width:100%;height:100%;object-fit:cover;opacity:0.28;">
-  </div>
-  <div class="hero-geo hero-geo-1"></div>
-  <div class="hero-geo hero-geo-2"></div>
-  <div class="hero-geo hero-geo-3"></div>
-  <div class="hero-content">
-    <div class="hero-tag">FIRST Robotics Competition &mdash; Lafayette, Indiana</div>
-    <h1>PRECISION<br><span class="accent">GUESSWORKS</span></h1>
-    <p class="hero-sub">
-      FIRST Team 1646. Building robots, developing leaders, and inspiring our community through STEM since 2005.
-    </p>
-    <div class="hero-awards">
-      <span class="award-badge"><span class="dot"></span>2026 World Championship — Imagery Award</span>
-      <span class="award-badge"><span class="dot"></span>2026 State Championship — Engineering Inspiration Award</span>
-      <span class="award-badge"><span class="dot"></span>2026 Lafayette District — Sustainability Award</span>
-      <span class="award-badge"><span class="dot"></span>2026 Mishawaka District — Engineering Inspiration Award</span>
-    </div>
-  </div>
-</section>
-
-<!-- ====== ABOUT ====== -->
-<section id="about">
-  <div class="section-inner">
-    <div class="section-label">Who We Are</div>
-    <div class="section-title">More Than Robots</div>
-    <div class="section-body">
-      Precision Guessworks is the FRC team of Broncho Robotics, a progression of FIRST programs within the Lafayette School Corporation. Our pipeline now spans grades 2 through 12 — from FIRST LEGO League Explore at elementary schools to FIRST Tech Challenge at Tecumseh Junior High to our FRC team at Jefferson High School. With 91% of our alumni pursuing STEM and a 100% graduation rate, we're building more than robots.
-    </div>
-    <div class="red-line"></div>
-    <div class="about-grid">
-      <div class="tenets">
-        <div class="tenet">
-          <div class="tenet-num">Tenet 01</div>
-          <h3>Embrace Technology</h3>
-          <p>We provide memorable experiences with STEM for our team and the people we impact through outreach. We believe our students can change the future of technology.</p>
-        </div>
-        <div class="tenet">
-          <div class="tenet-num">Tenet 02</div>
-          <h3>Educate Our Community</h3>
-          <p>We demonstrate our robots and design process at local events, inspiring young people to engage in the same ideals as our team and FIRST. Every school where we've done a STEM Night now has an FLL team.</p>
-        </div>
-        <div class="tenet">
-          <div class="tenet-num">Tenet 03</div>
-          <h3>Empower the World</h3>
-          <p>We use STEM to further our students' success and encourage them to solve global issues. No one person can change the world — FIRST helps students work as a team so they can.</p>
-        </div>
-      </div>
-      <div>
-        <div class="about-photo">
-          <img src="images/team_photo.png" alt="Team 1646" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== IMPACT STATS ====== -->
-<div class="stats-strip">
-  <div class="stats-grid">
-    <div class="stat">
-      <div class="stat-number">91%</div>
-      <div class="stat-label">Pursuing STEM</div>
-    </div>
-    <div class="stat">
-      <div class="stat-number">100%</div>
-      <div class="stat-label">Graduation Rate</div>
-    </div>
-    <div class="stat">
-      <div class="stat-number">54</div>
-      <div class="stat-label">Students New to FIRST</div>
-    </div>
-    <div class="stat">
-      <div class="stat-number">7/11</div>
-      <div class="stat-label">Schools with FIRST Programs</div>
-    </div>
-    <div class="stat">
-      <div class="stat-number">$86K</div>
-      <div class="stat-label">In Grants for LSC Robotics</div>
-    </div>
-    <div class="stat">
-      <div class="stat-number">2–12</div>
-      <div class="stat-label">Grade Levels Served</div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== SEASON ====== -->
-<section id="season">
-  <div class="section-inner">
-    <div class="section-label">2026 Season</div>
-    <div class="section-title">Season Highlights</div>
-    <div class="section-body">
-      This season we earned our way to the FIRST World Championship through our commitment to spreading STEM inspiration — and brought home hardware from Houston.
-    </div>
-    <div class="red-line"></div>
-    <div class="highlights-grid">
-      <div class="highlight-card">
-        <div class="highlight-card-image">
-          <img src="images/imagery_image.jpg" alt="World Championship Imagery Award" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="highlight-card-body">
-          <div class="highlight-year">FIRST World Championship</div>
-          <h3>Imagery Award</h3>
-          <p>Our team's visual identity and brand presentation earned recognition on the world stage at the FIRST Championship in Houston, Texas.</p>
-        </div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-card-image">
-          <img src="images/ei_image.jpg" alt="Indiana State Engineering Inspiration Award" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="highlight-card-body">
-          <div class="highlight-year">Indiana State Championship</div>
-          <h3>Engineering Inspiration Award</h3>
-          <p>Recognized for our commitment to spreading STEM awareness throughout Greater Lafayette. This award qualified the team for the World Championship in Houston.</p>
-        </div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-card-image">
-          <img src="images/robot_image.jpeg" alt="2026 Competition Robot" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="highlight-card-body">
-          <div class="highlight-year">2026 Robot</div>
-          <h3>Competition Robot</h3>
-          <p>Designed and built by students during the six-week build season. The robot independently qualified to compete at the Indiana State Championship.</p>
-        </div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-card-image">
-          <img src="images/sustainability_image.jpg" alt="Lafayette District Sustainability Award" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="highlight-card-body">
-          <div class="highlight-year">Lafayette District Event</div>
-          <h3>Sustainability Award</h3>
-          <p>Recognized for demonstrating a carefully developed and carefully executed business plan that builds sustainability for the team beyond just the current season.</p>
-        </div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-card-image">
-          <img src="images/ei_image_2.jpg" alt="Mishawaka District Engineering Inspiration Award" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="highlight-card-body">
-          <div class="highlight-year">Mishawaka District Event</div>
-          <h3>Engineering Inspiration Award</h3>
-          <p>Our first event of the season set the tone — earning the Engineering Inspiration Award for our efforts in STEM advocacy and community outreach.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== OUTREACH ====== -->
-<section id="outreach">
-  <div class="section-inner">
-    <div class="section-label">Leaving an Impact</div>
-    <div class="section-title">Community Outreach</div>
-    <div class="section-body">
-      Precision Guessworks is dedicated to bringing STEAM education to those around us in a fun and engaging manner. We organize our outreach sustainably — maximizing impact without burning out a small team.
-    </div>
-    <div class="red-line"></div>
-    <div class="outreach-grid">
-      <div class="outreach-item">
-        <div class="outreach-item-image">
-          <img src="images/FLL_Explore_image.jpg" alt="FLL Explore teams" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <h3>FLL Explore Expansion</h3>
-        <p>This year we launched 8 new FIRST LEGO League Explore teams across 4 elementary schools, bringing 54 students in grades 2–4 into the Broncho Robotics pipeline. We invested over $20,000 in LEGO and SPIKE kits, with 37% of our FRC students serving as mentors.</p>
-      </div>
-      <div class="outreach-item">
-        <div class="outreach-item-image">
-          <img src="images/stem_nights_image.jpg" alt="STEM Nights" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <h3>STEM Nights</h3>
-        <p>We bring FRC robots, FTC-scale robots, and hands-on STEAM activities to school STEM nights across the corporation. Activities range from block programming and circuit building to Sphero racing and banana pianos. Every school where we've presented a STEM Night now has an FLL team.</p>
-      </div>
-      <div class="outreach-item">
-        <div class="outreach-item-image">
-          <img src="images/imagination_station_image.jpg" alt="Imagination Station" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <h3>Imagination Station</h3>
-        <p>We have a long-standing partnership with Lafayette's local science museum, where we take over the main floor for full-day STEAM demonstrations. Visitors — typically ages 3 to 10 — explore our robots, race Spheros, and build creative devices. It's a 15+ year partnership reaching about 300 people per event.</p>
-      </div>
-      <div class="outreach-item">
-        <div class="outreach-item-image">
-          <img src="images/hosting_image.png" alt="Event hosting" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <h3>Event Hosting</h3>
-        <p>Since 2019, our schools have hosted 3 FLL, 1 FTC, and 5 FRC official competitions. Our students and coaches serve on planning committees, manage logistics, and this year are hosting the FLLE festival alongside our FRC district event.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== SPONSORS ====== -->
-<section id="sponsors">
-  <div class="section-inner">
-    <div class="section-label">Our Partners</div>
-    <div class="section-title">Support Our Team</div>
-    <div class="section-body">
-      Our sponsors make everything we do possible. From competition entry fees to materials for our robot to transportation for students — your support directly funds student experiences that last a lifetime.
-    </div>
-    <div class="red-line"></div>
-    <div class="sponsor-tiers">
-      <div class="sponsor-tier">
-        <div class="tier-name">Strategic Partner</div>
-        <div class="tier-amount">$2,000+</div>
-        <ul class="tier-benefits">
-          <li>Recognition at start of match</li>
-          <li>Logo on team robot</li>
-          <li>All previous tier benefits</li>
+    <!-- ====== NAV ====== -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <span class="num">1646</span> PRECISION GUESSWORKS
+        </a>
+        <button class="hamburger"
+          onclick="document.querySelector('.nav-links').classList.toggle('open')"
+          aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#season">Season</a></li>
+          <li><a href="#outreach">Outreach</a></li>
+          <li><a href="#sponsors">Sponsors</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a
+              href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX"
+              class="nav-cta" target="_blank" rel="noopener">Donate</a></li>
+          <li><a href="#" class="nav-login">Login</a></li>
         </ul>
       </div>
-      <div class="sponsor-tier">
-        <div class="tier-name">Platinum</div>
-        <div class="tier-amount">$1,000 – $1,999</div>
-        <ul class="tier-benefits">
-          <li>Logo on team t-shirt</li>
-          <li>All previous tier benefits</li>
-        </ul>
-      </div>
-      <div class="sponsor-tier">
-        <div class="tier-name">Gold</div>
-        <div class="tier-amount">$500 – $999</div>
-        <ul class="tier-benefits">
-          <li>Logo on team robot</li>
-          <li>Name listed on team website</li>
-          <li>All previous tier benefits</li>
-        </ul>
-      </div>
-      <div class="sponsor-tier">
-        <div class="tier-name">Silver</div>
-        <div class="tier-amount">$100 – $499</div>
-        <ul class="tier-benefits">
-          <li>Name listed on team robot</li>
-          <li>All previous tier benefits</li>
-        </ul>
-      </div>
-      <div class="sponsor-tier">
-        <div class="tier-name">Bronze</div>
-        <div class="tier-amount">Under $100</div>
-        <ul class="tier-benefits">
-          <li>Logo on team website</li>
-          <li>Thank you letter</li>
-        </ul>
-      </div>
-    </div>
+    </nav>
 
-    <div class="sponsor-logos">
-      <h3>Current Sponsors</h3>
-
-      <!-- Drop SVGs or transparent PNGs into images/sponsors/<tier>/ then add an <img> below. -->
-
-      <div class="logo-tier">
-        <div class="logo-tier-label">Strategic Partners</div>
-        <div class="logo-grid logo-grid--strategic">
-          <img src="images/sponsors/strategic/Cat (Strategic).svg" alt="Caterpillar">
-          <img src="images/sponsors/strategic/IDOE (Strategic).svg" alt="Indiana Department of Education">
-          <img src="images/sponsors/strategic/LSC (Strategic).svg" alt="Lafayette School Corporation">
-          <img src="images/sponsors/strategic/GAF (Strategic).svg" alt="GAF">
+    <!-- ====== HERO ====== -->
+    <section class="hero">
+      <div class="hero-image">
+        <img src="images/team_photo.png" alt="Precision Guessworks Team 1646"
+          style="width:100%;height:100%;object-fit:cover;opacity:0.28;">
+      </div>
+      <div class="hero-geo hero-geo-1"></div>
+      <div class="hero-geo hero-geo-2"></div>
+      <div class="hero-geo hero-geo-3"></div>
+      <div class="hero-content">
+        <div class="hero-tag">FIRST Robotics Competition &mdash; Lafayette,
+          Indiana</div>
+        <h1>PRECISION<br><span class="accent">GUESSWORKS</span></h1>
+        <p class="hero-sub">
+          FIRST Team 1646. Building robots, developing leaders, and inspiring
+          our community through STEM since 2005.
+        </p>
+        <div class="hero-awards">
+          <span class="award-badge"><span class="dot"></span>2026 World
+            Championship — Imagery Award</span>
+          <span class="award-badge"><span class="dot"></span>2026 State
+            Championship — Engineering Inspiration Award</span>
+          <span class="award-badge"><span class="dot"></span>2026 Lafayette
+            District — Sustainability Award</span>
+          <span class="award-badge"><span class="dot"></span>2026 Mishawaka
+            District — Engineering Inspiration Award</span>
         </div>
       </div>
+    </section>
 
-      <div class="logo-tier">
-        <div class="logo-tier-label">Platinum</div>
-        <div class="logo-grid logo-grid--platinum">
-          <img src="images/sponsors/platinum/Arconic (Platinum).svg" alt="Arconic">
-          <img src="images/sponsors/platinum/Bane's (Platinum).svg" alt="Bane's">
-          <img src="images/sponsors/platinum/Gaylor (Platnium).svg" alt="Gaylor">
-          <img src="images/sponsors/platinum/Radian (Platinum).svg" alt="Radian">
-          <div class="text-sponsor">John Park</div>
+    <!-- ====== ABOUT ====== -->
+    <section id="about">
+      <div class="section-inner">
+        <div class="section-label">Who We Are</div>
+        <div class="section-title">More Than Robots</div>
+        <div class="section-body">
+          Precision Guessworks is the FRC team of Broncho Robotics, a
+          progression of FIRST programs within the Lafayette School Corporation.
+          Our pipeline now spans grades 2 through 12 — from FIRST LEGO League
+          Explore at elementary schools to FIRST Tech Challenge at Tecumseh
+          Junior High to our FRC team at Jefferson High School. With 91% of our
+          alumni pursuing STEM and a 100% graduation rate, we're building more
+          than robots.
         </div>
-      </div>
-
-      <div class="logo-tier">
-        <div class="logo-tier-label">Gold</div>
-        <div class="logo-grid logo-grid--gold">
-          <img src="images/sponsors/gold/SparkGood (Gold).svg" alt="SparkGood">
-          <div class="text-sponsor">Tom Murtaugh</div>
-          <div class="text-sponsor">Bryan Jackson</div>
-          <div class="text-sponsor">Joseph Gamble</div>
-        </div>
-      </div>
-
-      <div class="logo-tier">
-        <div class="logo-tier-label">Silver</div>
-        <div class="logo-grid logo-grid--silver">
-          <div class="text-sponsor">Breakfast Optimists</div>
-          <div class="text-sponsor">Ed Harfmann</div>
-          <div class="text-sponsor">Rea Magnet Wire Company, Inc</div>
-          <div class="text-sponsor">Nothing Bundt Cakes</div>
-          <div class="text-sponsor">Z's Family</div>
-          <div class="text-sponsor">Tristan Medina</div>
-          <div class="text-sponsor">Theresa Jackson</div>
-          <div class="text-sponsor">Sarah Jackson</div>
-          <div class="text-sponsor">Lauren Jackson</div>
-          <div class="text-sponsor">Lafayette Relocation Services</div>
-          <div class="text-sponsor">DeFouw Automotive</div>
-          <div class="text-sponsor">Walt and Joyce Schrader</div>
-          <div class="text-sponsor">The Kline Family</div>
-          <div class="text-sponsor">The McGurr Family</div>
-        </div>
-      </div>
-
-      <div class="logo-tier">
-        <div class="logo-tier-label">Bronze</div>
-        <div class="logo-grid logo-grid--bronze">
-          <div class="text-sponsor">Jacob Crain</div>
-          <div class="text-sponsor">Greg Smith</div>
-          <div class="text-sponsor">Dan and Mary Ann Bettag</div>
-          <div class="text-sponsor">Rita Shultz</div>
-          <div class="text-sponsor">Terri Lerch</div>
-          <div class="text-sponsor">Julie Schmidt-Goecker</div>
-          <div class="text-sponsor">Gregory Ludlow</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sponsor-cta">
-      <p>Interested in supporting the next generation of engineers?</p>
-      <a href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX" class="btn btn-primary" target="_blank" rel="noopener">Donate Now</a>
-      &nbsp;&nbsp;
-      <a href="#contact" class="btn btn-outline">Contact Us</a>
-    </div>
-  </div>
-</section>
-
-<!-- ====== CONTACT ====== -->
-<section id="contact">
-  <div class="section-inner">
-    <div class="section-label">Get In Touch</div>
-    <div class="section-title">Contact Us</div>
-    <div class="section-body">
-      Whether you're a potential sponsor, a family interested in joining, or just want to learn more — we'd love to hear from you.
-    </div>
-    <div class="red-line"></div>
-    <div class="contact-grid">
-      <div class="contact-info">
-        <div class="contact-row">
-          <div class="contact-icon">&#9993;</div>
-          <div>
-            <h4>Email</h4>
-            <p><a href="mailto:robotics@lsc.k12.in.us">robotics@lsc.k12.in.us</a></p>
+        <div class="red-line"></div>
+        <div class="about-grid">
+          <div class="tenets">
+            <div class="tenet">
+              <div class="tenet-num">Tenet 01</div>
+              <h3>Embrace Technology</h3>
+              <p>We provide memorable experiences with STEM for our team and the
+                people we impact through outreach. We believe our students can
+                change the future of technology.</p>
+            </div>
+            <div class="tenet">
+              <div class="tenet-num">Tenet 02</div>
+              <h3>Educate Our Community</h3>
+              <p>We demonstrate our robots and design process at local events,
+                inspiring young people to engage in the same ideals as our team
+                and FIRST. Every school where we've done a STEM Night now has an
+                FLL team.</p>
+            </div>
+            <div class="tenet">
+              <div class="tenet-num">Tenet 03</div>
+              <h3>Empower the World</h3>
+              <p>We use STEM to further our students' success and encourage them
+                to solve global issues. No one person can change the world —
+                FIRST helps students work as a team so they can.</p>
+            </div>
           </div>
-        </div>
-        <div class="contact-row">
-          <div class="contact-icon">&#9962;</div>
           <div>
-            <h4>Location</h4>
-            <p>Jefferson High School<br>1801 S. 18th St.<br>Lafayette, IN 47905</p>
-          </div>
-        </div>
-        <div class="contact-row">
-          <div class="contact-icon">&#9734;</div>
-          <div>
-            <h4>Checks</h4>
-            <p>Made payable to:<br>JHS Robotics c/o Jill Rubacha</p>
+            <div class="about-photo">
+              <img src="images/team_photo.png" alt="Team 1646"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
           </div>
         </div>
       </div>
-      <form class="contact-form" action="#" method="POST">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-      </form>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ====== FOOTER ====== -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span class="red">1646</span> &middot; Precision Guessworks &middot; Lafayette, IN
+    <!-- ====== IMPACT STATS ====== -->
+    <div class="stats-strip">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">91%</div>
+          <div class="stat-label">Pursuing STEM</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Graduation Rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">54</div>
+          <div class="stat-label">Students New to FIRST</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">7/11</div>
+          <div class="stat-label">Schools with FIRST Programs</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">$86K</div>
+          <div class="stat-label">In Grants for LSC Robotics</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">2–12</div>
+          <div class="stat-label">Grade Levels Served</div>
+        </div>
+      </div>
     </div>
-    <ul class="footer-social">
-      <li><a href="https://www.facebook.com/FRC1646" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">f</a></li>
-      <li><a href="https://www.instagram.com/frc1646/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">ig</a></li>
-      <li><a href="https://www.youtube.com/user/FirstPG1646/videos" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube">yt</a></li>
-      <li><a href="https://twitter.com/BronchoRobotics" target="_blank" rel="noopener" aria-label="X" title="X">x</a></li>
-    </ul>
-    <div class="footer-info">
-      &copy; 2026 FIRST Team 1646. Part of the Lafayette School Corporation.
-    </div>
-  </div>
-</footer>
 
-</body>
+    <!-- ====== SEASON ====== -->
+    <section id="season">
+      <div class="section-inner">
+        <div class="section-label">2026 Season</div>
+        <div class="section-title">Season Highlights</div>
+        <div class="section-body">
+          This season we earned our way to the FIRST World Championship through
+          our commitment to spreading STEM inspiration — and brought home
+          hardware from Houston.
+        </div>
+        <div class="red-line"></div>
+        <div class="highlights-grid">
+          <div class="highlight-card">
+            <div class="highlight-card-image">
+              <img src="images/imagery_image.jpg"
+                alt="World Championship Imagery Award"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="highlight-card-body">
+              <div class="highlight-year">FIRST World Championship</div>
+              <h3>Imagery Award</h3>
+              <p>Our team's visual identity and brand presentation earned
+                recognition on the world stage at the FIRST Championship in
+                Houston, Texas.</p>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-image">
+              <img src="images/ei_image.jpg"
+                alt="Indiana State Engineering Inspiration Award"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="highlight-card-body">
+              <div class="highlight-year">Indiana State Championship</div>
+              <h3>Engineering Inspiration Award</h3>
+              <p>Recognized for our commitment to spreading STEM awareness
+                throughout Greater Lafayette. This award qualified the team for
+                the World Championship in Houston.</p>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-image">
+              <img src="images/robot_image.jpeg" alt="2026 Competition Robot"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="highlight-card-body">
+              <div class="highlight-year">2026 Robot</div>
+              <h3>Competition Robot</h3>
+              <p>Designed and built by students during the six-week build
+                season. The robot independently qualified to compete at the
+                Indiana State Championship.</p>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-image">
+              <img src="images/sustainability_image.jpg"
+                alt="Lafayette District Sustainability Award"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="highlight-card-body">
+              <div class="highlight-year">Lafayette District Event</div>
+              <h3>Sustainability Award</h3>
+              <p>Recognized for demonstrating a carefully developed and
+                carefully executed business plan that builds sustainability for
+                the team beyond just the current season.</p>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-image">
+              <img src="images/ei_image_2.jpg"
+                alt="Mishawaka District Engineering Inspiration Award"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="highlight-card-body">
+              <div class="highlight-year">Mishawaka District Event</div>
+              <h3>Engineering Inspiration Award</h3>
+              <p>Our first event of the season set the tone — earning the
+                Engineering Inspiration Award for our efforts in STEM advocacy
+                and community outreach.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== OUTREACH ====== -->
+    <section id="outreach">
+      <div class="section-inner">
+        <div class="section-label">Leaving an Impact</div>
+        <div class="section-title">Community Outreach</div>
+        <div class="section-body">
+          Precision Guessworks is dedicated to bringing STEAM education to those
+          around us in a fun and engaging manner. We organize our outreach
+          sustainably — maximizing impact without burning out a small team.
+        </div>
+        <div class="red-line"></div>
+        <div class="outreach-grid">
+          <div class="outreach-item">
+            <div class="outreach-item-image">
+              <img src="images/FLL_Explore_image.jpg" alt="FLL Explore teams"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <h3>FLL Explore Expansion</h3>
+            <p>This year we launched 8 new FIRST LEGO League Explore teams
+              across 4 elementary schools, bringing 54 students in grades 2–4
+              into the Broncho Robotics pipeline. We invested over $20,000 in
+              LEGO and SPIKE kits, with 37% of our FRC students serving as
+              mentors.</p>
+          </div>
+          <div class="outreach-item">
+            <div class="outreach-item-image">
+              <img src="images/stem_nights_image.jpg" alt="STEM Nights"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <h3>STEM Nights</h3>
+            <p>We bring FRC robots, FTC-scale robots, and hands-on STEAM
+              activities to school STEM nights across the corporation.
+              Activities range from block programming and circuit building to
+              Sphero racing and banana pianos. Every school where we've
+              presented a STEM Night now has an FLL team.</p>
+          </div>
+          <div class="outreach-item">
+            <div class="outreach-item-image">
+              <img src="images/imagination_station_image.jpg"
+                alt="Imagination Station"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <h3>Imagination Station</h3>
+            <p>We have a long-standing partnership with Lafayette's local
+              science museum, where we take over the main floor for full-day
+              STEAM demonstrations. Visitors — typically ages 3 to 10 — explore
+              our robots, race Spheros, and build creative devices. It's a 15+
+              year partnership reaching about 300 people per event.</p>
+          </div>
+          <div class="outreach-item">
+            <div class="outreach-item-image">
+              <img src="images/hosting_image.png" alt="Event hosting"
+                style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <h3>Event Hosting</h3>
+            <p>Since 2019, our schools have hosted 3 FLL, 1 FTC, and 5 FRC
+              official competitions. Our students and coaches serve on planning
+              committees, manage logistics, and this year are hosting the FLLE
+              festival alongside our FRC district event.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== SPONSORS ====== -->
+    <section id="sponsors">
+      <div class="section-inner">
+        <div class="section-label">Our Partners</div>
+        <div class="section-title">Support Our Team</div>
+        <div class="section-body">
+          Our sponsors make everything we do possible. From competition entry
+          fees to materials for our robot to transportation for students — your
+          support directly funds student experiences that last a lifetime.
+        </div>
+        <div class="red-line"></div>
+        <div class="sponsor-tiers">
+          <div class="sponsor-tier">
+            <div class="tier-name">Strategic Partner</div>
+            <div class="tier-amount">$2,000+</div>
+            <ul class="tier-benefits">
+              <li>Recognition at start of match</li>
+              <li>Logo on team robot</li>
+              <li>All previous tier benefits</li>
+            </ul>
+          </div>
+          <div class="sponsor-tier">
+            <div class="tier-name">Platinum</div>
+            <div class="tier-amount">$1,000 – $1,999</div>
+            <ul class="tier-benefits">
+              <li>Logo on team t-shirt</li>
+              <li>All previous tier benefits</li>
+            </ul>
+          </div>
+          <div class="sponsor-tier">
+            <div class="tier-name">Gold</div>
+            <div class="tier-amount">$500 – $999</div>
+            <ul class="tier-benefits">
+              <li>Logo on team robot</li>
+              <li>Name listed on team website</li>
+              <li>All previous tier benefits</li>
+            </ul>
+          </div>
+          <div class="sponsor-tier">
+            <div class="tier-name">Silver</div>
+            <div class="tier-amount">$100 – $499</div>
+            <ul class="tier-benefits">
+              <li>Name listed on team robot</li>
+              <li>All previous tier benefits</li>
+            </ul>
+          </div>
+          <div class="sponsor-tier">
+            <div class="tier-name">Bronze</div>
+            <div class="tier-amount">Under $100</div>
+            <ul class="tier-benefits">
+              <li>Logo on team website</li>
+              <li>Thank you letter</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sponsor-logos">
+          <h3>Current Sponsors</h3>
+
+          <!-- Drop SVGs or transparent PNGs into images/sponsors/<tier>/ then add an <img> below. -->
+
+          <div class="logo-tier">
+            <div class="logo-tier-label">Strategic Partners</div>
+            <div class="logo-grid logo-grid--strategic">
+              <img src="images/sponsors/strategic/Cat (Strategic).svg"
+                alt="Caterpillar">
+              <img src="images/sponsors/strategic/IDOE (Strategic).svg"
+                alt="Indiana Department of Education">
+              <img src="images/sponsors/strategic/LSC (Strategic).svg"
+                alt="Lafayette School Corporation">
+              <img src="images/sponsors/strategic/GAF (Strategic).svg"
+                alt="GAF">
+            </div>
+          </div>
+
+          <div class="logo-tier">
+            <div class="logo-tier-label">Platinum</div>
+            <div class="logo-grid logo-grid--platinum">
+              <img src="images/sponsors/platinum/Arconic (Platinum).svg"
+                alt="Arconic">
+              <img src="images/sponsors/platinum/Bane's (Platinum).svg"
+                alt="Bane's">
+              <img src="images/sponsors/platinum/Gaylor (Platnium).svg"
+                alt="Gaylor">
+              <img src="images/sponsors/platinum/Radian (Platinum).svg"
+                alt="Radian">
+              <div class="text-sponsor">John Park</div>
+            </div>
+          </div>
+
+          <div class="logo-tier">
+            <div class="logo-tier-label">Gold</div>
+            <div class="logo-grid logo-grid--gold">
+              <img src="images/sponsors/gold/SparkGood (Gold).svg"
+                alt="SparkGood">
+              <div class="text-sponsor">Tom Murtaugh</div>
+              <div class="text-sponsor">Bryan Jackson</div>
+              <div class="text-sponsor">Joseph Gamble</div>
+            </div>
+          </div>
+
+          <div class="logo-tier">
+            <div class="logo-tier-label">Silver</div>
+            <div class="logo-grid logo-grid--silver">
+              <div class="text-sponsor">Breakfast Optimists</div>
+              <div class="text-sponsor">Ed Harfmann</div>
+              <div class="text-sponsor">Rea Magnet Wire Company, Inc</div>
+              <div class="text-sponsor">Nothing Bundt Cakes</div>
+              <div class="text-sponsor">Z's Family</div>
+              <div class="text-sponsor">Tristan Medina</div>
+              <div class="text-sponsor">Theresa Jackson</div>
+              <div class="text-sponsor">Sarah Jackson</div>
+              <div class="text-sponsor">Lauren Jackson</div>
+              <div class="text-sponsor">Lafayette Relocation Services</div>
+              <div class="text-sponsor">DeFouw Automotive</div>
+              <div class="text-sponsor">Walt and Joyce Schrader</div>
+              <div class="text-sponsor">The Kline Family</div>
+              <div class="text-sponsor">The McGurr Family</div>
+            </div>
+          </div>
+
+          <div class="logo-tier">
+            <div class="logo-tier-label">Bronze</div>
+            <div class="logo-grid logo-grid--bronze">
+              <div class="text-sponsor">Jacob Crain</div>
+              <div class="text-sponsor">Greg Smith</div>
+              <div class="text-sponsor">Dan and Mary Ann Bettag</div>
+              <div class="text-sponsor">Rita Shultz</div>
+              <div class="text-sponsor">Terri Lerch</div>
+              <div class="text-sponsor">Julie Schmidt-Goecker</div>
+              <div class="text-sponsor">Gregory Ludlow</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sponsor-cta">
+          <p>Interested in supporting the next generation of engineers?</p>
+          <a
+            href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX"
+            class="btn btn-primary" target="_blank" rel="noopener">Donate
+            Now</a>
+          &nbsp;&nbsp;
+          <a href="#contact" class="btn btn-outline">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== CONTACT ====== -->
+    <section id="contact">
+      <div class="section-inner">
+        <div class="section-label">Get In Touch</div>
+        <div class="section-title">Contact Us</div>
+        <div class="section-body">
+          Whether you're a potential sponsor, a family interested in joining, or
+          just want to learn more — we'd love to hear from you.
+        </div>
+        <div class="red-line"></div>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-row">
+              <div class="contact-icon">&#9993;</div>
+              <div>
+                <h4>Email</h4>
+                <p><a
+                    href="mailto:robotics@lsc.k12.in.us">robotics@lsc.k12.in.us</a></p>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">&#9872;</div>
+              <div>
+                <h4>Location</h4>
+                <p>Jefferson High School<br>1801 S. 18th St.<br>Lafayette, IN
+                  47905</p>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">&#9734;</div>
+              <div>
+                <h4>Checks</h4>
+                <p>Made payable to:<br>JHS Robotics c/o Jill Rubacha</p>
+              </div>
+            </div>
+          </div>
+          <form class="contact-form" action="#" method="POST">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="red">1646</span> &middot; Precision Guessworks &middot;
+          Lafayette, IN
+        </div>
+        <ul class="footer-social">
+          <li><a href="https://www.facebook.com/FRC1646" target="_blank"
+              rel="noopener" aria-label="Facebook" title="Facebook">f</a></li>
+          <li><a href="https://www.instagram.com/frc1646/" target="_blank"
+              rel="noopener" aria-label="Instagram"
+              title="Instagram">ig</a></li>
+          <li><a href="https://www.youtube.com/user/FirstPG1646/videos"
+              target="_blank" rel="noopener" aria-label="YouTube"
+              title="YouTube">yt</a></li>
+          <li><a href="https://twitter.com/BronchoRobotics" target="_blank"
+              rel="noopener" aria-label="X" title="X">x</a></li>
+        </ul>
+        <div class="footer-info">
+          &copy; 2026 FIRST Team 1646. Part of the Lafayette School Corporation.
+        </div>
+      </div>
+    </footer>
+
+  </body>
 </html>
