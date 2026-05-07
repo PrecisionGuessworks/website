@@ -599,6 +599,22 @@
     text-transform: uppercase;
   }
 
+  /* Text-only sponsor names — sized per tier to match logo presence */
+  .text-sponsor {
+    font-family: var(--font-heading);
+    color: var(--gray-200);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .logo-grid--strategic .text-sponsor { font-size: 32px; }
+  .logo-grid--platinum  .text-sponsor { font-size: 26px; }
+  .logo-grid--gold      .text-sponsor { font-size: 22px; }
+  .logo-grid--silver    .text-sponsor { font-size: 18px; letter-spacing: 1.5px; }
+  .logo-grid--bronze    .text-sponsor { font-size: 15px; letter-spacing: 1.5px; }
+
   .sponsor-cta {
     margin-top: 48px;
     text-align: center;
@@ -1131,35 +1147,55 @@
       <div class="logo-tier">
         <div class="logo-tier-label">Strategic Partners</div>
         <div class="logo-grid logo-grid--strategic">
-          <!-- e.g. <img src="images/sponsors/strategic/example.svg" alt="Example"> -->
+          <img src="images/sponsors/strategic/Cat (Strategic).svg" alt="Caterpillar">
+          <img src="images/sponsors/strategic/IDOE (Strategic).svg" alt="Indiana Department of Education">
+          <img src="images/sponsors/strategic/LSC (Strategic).svg" alt="Lafayette School Corporation">
+          <img src="images/sponsors/strategic/GAF (Strategic).svg" alt="GAF">
         </div>
       </div>
 
       <div class="logo-tier">
         <div class="logo-tier-label">Platinum</div>
         <div class="logo-grid logo-grid--platinum">
-          <!-- <img src="images/sponsors/platinum/example.svg" alt="Example"> -->
+          <img src="images/sponsors/platinum/Arconic (Platinum).svg" alt="Arconic">
+          <img src="images/sponsors/platinum/Bane's (Platinum).svg" alt="Bane's">
+          <img src="images/sponsors/platinum/Gaylor (Platnium).svg" alt="Gaylor">
+          <img src="images/sponsors/platinum/Radian (Platinum).svg" alt="Radian">
+          <div class="text-sponsor">John Park</div>
         </div>
       </div>
 
       <div class="logo-tier">
         <div class="logo-tier-label">Gold</div>
         <div class="logo-grid logo-grid--gold">
-          <!-- <img src="images/sponsors/gold/example.svg" alt="Example"> -->
+          <img src="images/sponsors/gold/SparkGood (Gold).svg" alt="SparkGood">
+          <div class="text-sponsor">Tom Murtaugh</div>
+          <div class="text-sponsor">Brayan Jackson</div>
+          <div class="text-sponsor">Joseph Gamble</div>
         </div>
       </div>
 
       <div class="logo-tier">
         <div class="logo-tier-label">Silver</div>
         <div class="logo-grid logo-grid--silver">
-          <!-- <img src="images/sponsors/silver/example.svg" alt="Example"> -->
+          <div class="text-sponsor">Breakfast Optimists</div>
+          <div class="text-sponsor">Ed Harfmann</div>
+          <div class="text-sponsor">Rea Magnet Wire Company, Inc</div>
+          <div class="text-sponsor">Nothing Bundt Cakes</div>
+          <div class="text-sponsor">Z's Family</div>
+          <div class="text-sponsor">Tristan Medina</div>
+          <div class="text-sponsor">Theresa Jackson</div>
+          <div class="text-sponsor">Sarah Jackson</div>
+          <div class="text-sponsor">Lauren Jackson</div>
+          <div class="text-sponsor">Lafayette Relocation Services</div>
+          <div class="text-sponsor">DeFouw Automotive</div>
         </div>
       </div>
 
       <div class="logo-tier">
         <div class="logo-tier-label">Bronze</div>
         <div class="logo-grid logo-grid--bronze">
-          <!-- <img src="images/sponsors/bronze/example.svg" alt="Example"> -->
+          <div class="text-sponsor">Jacob Crain</div>
         </div>
       </div>
     </div>
