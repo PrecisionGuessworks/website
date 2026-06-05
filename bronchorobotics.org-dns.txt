@@ -1,0 +1,13 @@
+;; BIND zone file for bronchorobotics.org
+;; Points the domain at GitHub Pages (PrecisionGuessworks/website)
+;; Import this in Cloudflare: DNS > Records > Import and Export > Import
+;; IMPORTANT: leave the "Proxy imported DNS records" checkbox UNCHECKED.
+
+;; Apex domain (bronchorobotics.org) -> GitHub Pages IPv4 addresses
+bronchorobotics.org.	3600	IN	A	185.199.108.153
+bronchorobotics.org.	3600	IN	A	185.199.109.153
+bronchorobotics.org.	3600	IN	A	185.199.110.153
+bronchorobotics.org.	3600	IN	A	185.199.111.153
+
+;; www subdomain -> GitHub Pages site
+www.bronchorobotics.org.	3600	IN	CNAME	precisionguessworks.github.io.
