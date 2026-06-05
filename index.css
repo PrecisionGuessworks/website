@@ -92,6 +92,10 @@
     gap: 32px;
     list-style: none;
   }
+  .nav-logo img {
+    width:54px
+
+  }
   .nav-links a {
     font-family: var(--font-heading);
     font-size: 15px;
@@ -355,14 +359,15 @@
     position: relative;
     overflow: hidden;
   }
-  .about-photo::before {
+  /* This is another Geo */
+  /* .about-photo::before { 
     content: '';
     position: absolute;
     top: -20px; right: -20px;
     width: 120px; height: 120px;
     border: 2px solid var(--red-50);
     transform: rotate(15deg);
-  }
+  } */
   .placeholder-label {
     font-size: 12px;
     color: var(--gray-700);
@@ -544,7 +549,7 @@
   .logo-tier:last-child { margin-bottom: 0; }
   .logo-tier-label {
     font-family: var(--font-heading);
-    font-size: 12px;
+    font-size: 25px;
     letter-spacing: 3px;
     color: var(--red);
     text-align: center;
@@ -596,6 +601,7 @@
     text-transform: uppercase;
     line-height: 1.1;
     text-align: center;
+    font-size: 18px;
     padding: 0 4px;
   }
   .logo-grid--strategic .text-sponsor { font-size: 32px; }
@@ -673,7 +679,7 @@
   .form-group input,
   .form-group textarea {
     background: var(--black);
-    border: 1px solid var(--gray-800);
+    border: 1.7px solid var(--gray-800);
     padding: 12px 16px;
     color: var(--gray-200);
     font-family: var(--font-body);
@@ -741,11 +747,29 @@
     flex-wrap: wrap;
     gap: 24px;
   }
+  .footer-brand span {
+    display:inline-flex;
+    align-items:center;
+  }
   .footer-brand {
     font-family: var(--font-heading);
     font-size: 18px;
     color: var(--gray-500);
     letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .footer-brand img{
+    display: block;
+    height: 32px;
+    width: auto;
+    display:block;
+    height:32px;
+    width:auto;
   }
   .footer-brand .red { color: var(--red); }
   .footer-social {

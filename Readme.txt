@@ -5,3 +5,6 @@ TODO:
     - Fix consistency
     - Add team logos
     - Make loading faster - send fonts, better image formats
+    - Update Tier wording
+
+
