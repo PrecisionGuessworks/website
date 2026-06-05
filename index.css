@@ -686,6 +686,14 @@
     border-color: var(--red-50);
   }
   .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-status {
+    font-size: 14px;
+    margin: 0;
+    min-height: 1em;
+    color: var(--gray-400);
+  }
+  .form-status.success { color: #2ecc71; }
+  .form-status.error { color: var(--red); }
 
   /* ============================================================
      BUTTONS
