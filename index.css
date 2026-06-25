@@ -636,43 +636,77 @@
   }
   .doc-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
     margin-top: 48px;
   }
   .doc-card {
     display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 28px 24px;
+    flex-direction: column;
     background: var(--gray-900);
     border: 1px solid var(--gray-800);
-    border-left: 3px solid var(--red);
+    border-radius: 10px;
+    overflow: hidden;
     text-decoration: none;
-    transition: background 0.3s, transform 0.3s;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
   }
   .doc-card:hover {
-    background: rgba(58,58,60,0.4);
-    transform: translateY(-3px);
+    transform: translateY(-6px);
+    border-color: var(--red);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.55);
   }
-  .doc-icon {
-    flex-shrink: 0;
-    width: 48px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Cover preview — portrait to match letter-size documents */
+  .doc-thumb {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-800);
+  }
+  .doc-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform 0.5s ease;
+  }
+  /* Landscape covers (e.g. the tri-fold brochure) — show the title panel */
+  .doc-thumb--wide img { object-position: right center; }
+  .doc-card:hover .doc-thumb img { transform: scale(1.04); }
+  /* Gentle fade so the badge stays legible over any cover */
+  .doc-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0.35) 0%, transparent 32%);
+    pointer-events: none;
+  }
+  .doc-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 1;
     font-family: var(--font-heading);
-    font-size: 14px;
-    letter-spacing: 1px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     color: var(--white);
     background: var(--red);
-    border-radius: 2px;
+    padding: 5px 12px;
+    border-radius: 3px;
   }
-  .doc-body { display: flex; flex-direction: column; gap: 8px; }
+  .doc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px 24px 26px;
+    flex: 1;
+  }
   .doc-body h3 {
     font-family: var(--font-heading);
-    font-size: 22px;
+    font-size: 26px;
+    line-height: 1.05;
     color: var(--white);
     letter-spacing: 1px;
   }
@@ -682,29 +716,23 @@
     line-height: 1.7;
   }
   .doc-meta {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--gray-800);
     font-family: var(--font-heading);
     font-size: 13px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--red);
-    margin-top: 4px;
+    color: var(--gray-400);
   }
-  .doc-card:hover .doc-meta { color: var(--white); }
-  .doc-tag {
-    display: inline-block;
-    font-family: var(--font-heading);
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: var(--gray-300);
-    background: var(--gray-800);
-    padding: 2px 8px;
-    border-radius: 2px;
-    vertical-align: middle;
+  .doc-cta { color: var(--red); transition: transform 0.3s; }
+  .doc-card:hover .doc-cta {
+    color: var(--white);
+    transform: translateX(4px);
   }
-  /* The Outreach Binder is not published yet — soften its card until the
-     PDF is added to documents/ and the doc-card--soon class is removed. */
-  .doc-card--soon .doc-icon { background: var(--gray-800); }
-  .doc-card--soon .doc-meta { color: var(--gray-400); }
 
   /* ============================================================
      CONTACT
