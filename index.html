@@ -774,8 +774,9 @@
         //   var API_KEY = 'AIzaSy...';
         // Until it's set, the calendar shows a "coming soon" message.
         // =====================================================================
-        var API_KEY = 'PASTE_API_KEY_HERE';
+        var API_KEY = 'AIzaSyC9v4IUfIg5heSO-fa71vt9EayCeH8FOKQ';
 
+        // Events are shown in the team's local time, wherever the visitor is.
         var TIME_ZONE = 'America/Indiana/Indianapolis';
         var MAX_CHIPS = 2;
         var UPCOMING_COUNT = 8;
@@ -801,8 +802,12 @@
         var fmtFullDay = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         var fmtShortDay = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
         var fmtTime = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+        var fmtZoneParts = new Intl.DateTimeFormat('en-US', {
+          timeZone: TIME_ZONE, hourCycle: 'h23', year: 'numeric', month: 'numeric',
+          day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'
+        });
 
-        var today = startOfDay(new Date());
+        var today = startOfDay(toTeamTime(new Date()));
         var view = new Date(today.getFullYear(), today.getMonth(), 1);
         var selected = null;
         var events = [];
@@ -874,9 +879,10 @@
           var key = month.getFullYear() + '-' + month.getMonth();
           if (cache[key]) return cache[key];
           var range = gridRange(month);
+          // Pad a day either side to cover the visitor/team time zone offset.
           cache[key] = request('&maxResults=250'
-            + '&timeMin=' + encodeURIComponent(range.start.toISOString())
-            + '&timeMax=' + encodeURIComponent(range.end.toISOString()));
+            + '&timeMin=' + encodeURIComponent(addDays(range.start, -1).toISOString())
+            + '&timeMax=' + encodeURIComponent(addDays(range.end, 1).toISOString()));
           cache[key].catch(function () { delete cache[key]; });
           return cache[key];
         }
@@ -908,8 +914,8 @@
 
         function normalize(item) {
           var allDay = !!item.start.date;
-          var start = allDay ? parseDate(item.start.date) : new Date(item.start.dateTime);
-          var end = allDay ? parseDate(item.end.date) : new Date(item.end.dateTime);
+          var start = allDay ? parseDate(item.start.date) : toTeamTime(new Date(item.start.dateTime));
+          var end = allDay ? parseDate(item.end.date) : toTeamTime(new Date(item.end.dateTime));
           return {
             title: item.summary || 'Untitled event',
             allDay: allDay,
@@ -1090,6 +1096,13 @@
           var doc = new DOMParser().parseFromString(
             html.replace(/<br\s*\/?>/gi, '\n'), 'text/html');
           return (doc.body.textContent || '').trim();
+        }
+        // Re-expresses an instant as the same wall-clock time in TIME_ZONE, so
+        // all date math and formatting below happens in team-local time.
+        function toTeamTime(date) {
+          var p = {};
+          fmtZoneParts.formatToParts(date).forEach(function (part) { p[part.type] = +part.value; });
+          return new Date(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
         }
         function parseDate(s) {
           var p = s.split('-');
