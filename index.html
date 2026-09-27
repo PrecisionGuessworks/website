@@ -42,6 +42,7 @@
           <li><a href="#outreach">Outreach</a></li>
           <li><a href="#sponsors">Sponsors</a></li>
           <li><a href="#resources">Resources</a></li>
+          <li><a href="#calendar">Calendar</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a
               href="https://checkout.square.site/merchant/MLM3GZTVV1CB7/checkout/X7NILXOKUZPVS5HCDIINUBYX"
@@ -550,6 +551,60 @@
       </div>
     </section>
 
+    <!-- ====== CALENDAR ====== -->
+    <!-- Events are pulled live from the team's public Google Calendar.
+         Set CALENDAR_ID and API_KEY in the calendar script near the bottom
+         of this file. -->
+    <section id="calendar">
+      <div class="section-inner">
+        <div class="section-label">What&rsquo;s Coming Up</div>
+        <div class="section-title">Team Calendar</div>
+        <div class="section-body">
+          Competitions, outreach events, and team meetings &mdash; all in one
+          place. Pick a day to see what&rsquo;s happening, or add our calendar
+          to your own so you never miss an event.
+        </div>
+        <div class="red-line"></div>
+
+        <div class="cal" id="team-calendar">
+          <div class="cal-month">
+            <div class="cal-toolbar">
+              <button type="button" class="cal-nav" data-cal="prev"
+                aria-label="Previous month">&lsaquo;</button>
+              <h3 class="cal-title" data-cal="title" aria-live="polite"></h3>
+              <button type="button" class="cal-nav" data-cal="next"
+                aria-label="Next month">&rsaquo;</button>
+              <button type="button" class="cal-today"
+                data-cal="today">Today</button>
+            </div>
+            <div class="cal-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+              <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="cal-grid" data-cal="grid"></div>
+          </div>
+
+          <div class="cal-agenda">
+            <div class="cal-agenda-head">
+              <h3 data-cal="agenda-title">Upcoming</h3>
+              <button type="button" class="cal-clear" data-cal="clear"
+                hidden>Show all</button>
+            </div>
+            <p class="cal-status" data-cal="status" role="status"
+              aria-live="polite"></p>
+            <ul class="cal-events" data-cal="events"></ul>
+          </div>
+        </div>
+
+        <div class="cal-actions" data-cal="actions" hidden>
+          <a class="btn btn-primary" data-cal="subscribe" target="_blank"
+            rel="noopener">Add to My Calendar</a>
+          <a class="btn btn-outline" data-cal="open" target="_blank"
+            rel="noopener">Open in Google Calendar</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ====== CONTACT ====== -->
     <section id="contact">
       <div class="section-inner">
@@ -702,6 +757,347 @@
         function setStatus(text, type) {
           status.textContent = text;
           status.className = 'form-status' + (type ? ' ' + type : '');
+        }
+      })();
+    </script>
+
+    <!-- ====== TEAM CALENDAR ====== -->
+    <script>
+      (function () {
+        // ---- Configuration -------------------------------------------------
+        // CALENDAR_ID: Google Calendar > Settings > (your calendar) >
+        //   "Integrate calendar" > Calendar ID. The calendar must be public
+        //   ("Make available to public" under Access permissions).
+        // API_KEY: a Google Cloud API key with the Google Calendar API
+        //   enabled. Restrict it to this site's domain (HTTP referrers).
+        var CALENDAR_ID = 'YOUR_CALENDAR_ID@group.calendar.google.com';
+        var API_KEY = 'YOUR_GOOGLE_API_KEY';
+        var TIME_ZONE = 'America/Indiana/Indianapolis';
+        var MAX_CHIPS = 2;
+        var UPCOMING_COUNT = 8;
+
+        var root = document.getElementById('team-calendar');
+        if (!root) return;
+        var section = document.getElementById('calendar');
+        function $(name) { return section.querySelector('[data-cal="' + name + '"]'); }
+
+        var els = {
+          title: $('title'), grid: $('grid'), agendaTitle: $('agenda-title'),
+          clear: $('clear'), status: $('status'), events: $('events'),
+          actions: $('actions'), subscribe: $('subscribe'), open: $('open')
+        };
+
+        var configured = CALENDAR_ID.indexOf('YOUR_') === -1
+          && API_KEY.indexOf('YOUR_') === -1;
+
+        var fmtMonthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
+        var fmtMonth = new Intl.DateTimeFormat('en-US', { month: 'long' });
+        var fmtMonthShort = new Intl.DateTimeFormat('en-US', { month: 'short' });
+        var fmtWeekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
+        var fmtLongDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        var fmtFullDay = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        var fmtShortDay = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+        var fmtTime = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+
+        var today = startOfDay(new Date());
+        var view = new Date(today.getFullYear(), today.getMonth(), 1);
+        var selected = null;
+        var events = [];
+        var upcoming = [];
+        var upcomingRequest = null;
+        var cache = {};
+        var requestId = 0;
+
+        if (configured) {
+          els.subscribe.href = 'https://calendar.google.com/calendar/render?cid='
+            + encodeURIComponent(CALENDAR_ID);
+          els.open.href = 'https://calendar.google.com/calendar/embed?src='
+            + encodeURIComponent(CALENDAR_ID) + '&ctz=' + encodeURIComponent(TIME_ZONE);
+          els.actions.hidden = false;
+        }
+
+        $('prev').addEventListener('click', function () { goTo(addMonths(view, -1)); });
+        $('next').addEventListener('click', function () { goTo(addMonths(view, 1)); });
+        $('today').addEventListener('click', function () {
+          selected = null;
+          goTo(new Date(today.getFullYear(), today.getMonth(), 1));
+        });
+        els.clear.addEventListener('click', function () {
+          selected = null;
+          renderGrid();
+          renderAgenda();
+        });
+
+        goTo(view);
+
+        // ---- Data ----------------------------------------------------------
+        function goTo(month) {
+          view = month;
+          els.title.textContent = fmtMonthYear.format(view);
+          var id = ++requestId;
+          events = [];
+          renderGrid();
+
+          if (!configured) {
+            renderAgenda();
+            setStatus('Our event calendar is coming soon. Check back shortly!');
+            return;
+          }
+
+          root.classList.add('is-loading');
+          setStatus('Loading events…');
+          els.events.textContent = '';
+
+          var needed = [load(view), isCurrentMonth() ? loadUpcoming() : upcoming];
+          Promise.all(needed).then(function (results) {
+            if (id !== requestId) return;
+            events = results[0];
+            upcoming = results[1];
+            root.classList.remove('is-loading');
+            renderGrid();
+            renderAgenda();
+          }, function () {
+            if (id !== requestId) return;
+            root.classList.remove('is-loading');
+            renderAgenda();
+            els.events.textContent = '';
+            setStatus('We couldn’t load the calendar right now. '
+              + 'Please try again later.', 'error');
+          });
+        }
+
+        // Events shown in the month grid (including spill-over days).
+        function load(month) {
+          var key = month.getFullYear() + '-' + month.getMonth();
+          if (cache[key]) return cache[key];
+          var range = gridRange(month);
+          cache[key] = request('&maxResults=250'
+            + '&timeMin=' + encodeURIComponent(range.start.toISOString())
+            + '&timeMax=' + encodeURIComponent(range.end.toISOString()));
+          cache[key].catch(function () { delete cache[key]; });
+          return cache[key];
+        }
+
+        // The next few events from now, whatever month they fall in.
+        function loadUpcoming() {
+          if (!upcomingRequest) {
+            upcomingRequest = request('&maxResults=' + UPCOMING_COUNT
+              + '&timeMin=' + encodeURIComponent(new Date().toISOString()));
+            upcomingRequest.catch(function () { upcomingRequest = null; });
+          }
+          return upcomingRequest;
+        }
+
+        function request(params) {
+          var url = 'https://www.googleapis.com/calendar/v3/calendars/'
+            + encodeURIComponent(CALENDAR_ID) + '/events'
+            + '?key=' + encodeURIComponent(API_KEY)
+            + '&singleEvents=true&orderBy=startTime' + params;
+          return fetch(url).then(function (response) {
+            if (!response.ok) throw new Error('Calendar request failed');
+            return response.json();
+          }).then(function (data) {
+            return (data.items || []).filter(function (item) {
+              return item.status !== 'cancelled' && item.start;
+            }).map(normalize).sort(function (a, b) { return a.start - b.start; });
+          });
+        }
+
+        function normalize(item) {
+          var allDay = !!item.start.date;
+          var start = allDay ? parseDate(item.start.date) : new Date(item.start.dateTime);
+          var end = allDay ? parseDate(item.end.date) : new Date(item.end.dateTime);
+          return {
+            title: item.summary || 'Untitled event',
+            allDay: allDay,
+            start: start,
+            // End is exclusive; give zero-length events a sliver of duration.
+            end: end > start ? end : new Date(start.getTime() + 1),
+            location: item.location || '',
+            description: stripHtml(item.description || ''),
+            link: item.htmlLink || ''
+          };
+        }
+
+        // ---- Rendering -----------------------------------------------------
+        function renderGrid() {
+          var range = gridRange(view);
+          var frag = document.createDocumentFragment();
+          for (var day = range.start; day < range.end; day = addDays(day, 1)) {
+            var dayEvents = eventsBetween(day, addDays(day, 1));
+            var cell = document.createElement('button');
+            cell.type = 'button';
+            cell.className = 'cal-day';
+            if (day.getMonth() !== view.getMonth()) cell.classList.add('is-outside');
+            if (sameDay(day, today)) cell.classList.add('is-today');
+            if (selected && sameDay(day, selected)) cell.classList.add('is-selected');
+            if (dayEvents.length) cell.classList.add('has-events');
+            cell.setAttribute('aria-pressed', selected && sameDay(day, selected) ? 'true' : 'false');
+            cell.setAttribute('aria-label', fmtFullDay.format(day)
+              + (dayEvents.length ? ', ' + dayEvents.length
+                + (dayEvents.length === 1 ? ' event' : ' events') : ''));
+
+            var num = document.createElement('span');
+            num.className = 'cal-day-num';
+            num.textContent = day.getDate();
+            cell.appendChild(num);
+
+            if (dayEvents.length) {
+              var chips = document.createElement('span');
+              chips.className = 'cal-chips';
+              dayEvents.slice(0, MAX_CHIPS).forEach(function (ev) {
+                var chip = document.createElement('span');
+                chip.className = 'cal-chip' + (ev.allDay ? ' is-all-day' : '');
+                chip.textContent = ev.title;
+                chips.appendChild(chip);
+              });
+              if (dayEvents.length > MAX_CHIPS) {
+                var more = document.createElement('span');
+                more.className = 'cal-more';
+                more.textContent = '+' + (dayEvents.length - MAX_CHIPS) + ' more';
+                chips.appendChild(more);
+              }
+              cell.appendChild(chips);
+
+              var dots = document.createElement('span');
+              dots.className = 'cal-dots';
+              for (var i = 0; i < Math.min(dayEvents.length, 3); i++) {
+                dots.appendChild(document.createElement('i'));
+              }
+              cell.appendChild(dots);
+            }
+
+            cell.addEventListener('click', onDayClick.bind(null, day));
+            frag.appendChild(cell);
+          }
+          els.grid.textContent = '';
+          els.grid.appendChild(frag);
+        }
+
+        function onDayClick(day) {
+          if (selected && sameDay(day, selected)) {
+            selected = null;
+          } else {
+            selected = day;
+          }
+          if (day.getMonth() !== view.getMonth()) {
+            goTo(new Date(day.getFullYear(), day.getMonth(), 1));
+            return;
+          }
+          renderGrid();
+          renderAgenda();
+        }
+
+        function renderAgenda() {
+          var list, empty;
+          if (selected) {
+            els.agendaTitle.textContent = fmtLongDay.format(selected);
+            list = eventsBetween(selected, addDays(selected, 1));
+            empty = 'Nothing scheduled for this day.';
+          } else if (isCurrentMonth()) {
+            els.agendaTitle.textContent = 'Upcoming Events';
+            list = upcoming;
+            empty = 'No upcoming events yet. Check back soon!';
+          } else {
+            els.agendaTitle.textContent = fmtMonthYear.format(view);
+            list = eventsBetween(view, addMonths(view, 1));
+            empty = view < today
+              ? 'No events were scheduled this month.'
+              : 'Nothing scheduled for ' + fmtMonth.format(view) + ' yet.';
+          }
+          els.clear.hidden = !selected;
+
+          els.events.textContent = '';
+          list.forEach(function (ev) { els.events.appendChild(renderEvent(ev)); });
+          setStatus(list.length || !configured ? '' : empty);
+        }
+
+        function renderEvent(ev) {
+          var li = document.createElement('li');
+          li.className = 'cal-event';
+
+          var date = document.createElement('div');
+          date.className = 'cal-event-date';
+          date.appendChild(textEl('span', 'cal-event-dow', fmtWeekday.format(ev.start)));
+          date.appendChild(textEl('span', 'cal-event-dom', String(ev.start.getDate())));
+          date.appendChild(textEl('span', 'cal-event-mon', fmtMonthShort.format(ev.start)));
+          li.appendChild(date);
+
+          var body = document.createElement('div');
+          body.className = 'cal-event-body';
+          body.appendChild(textEl('h4', '', ev.title));
+          body.appendChild(textEl('p', 'cal-event-time', formatWhen(ev)));
+
+          if (ev.location) {
+            var loc = document.createElement('a');
+            loc.className = 'cal-event-loc';
+            loc.href = 'https://www.google.com/maps/search/?api=1&query='
+              + encodeURIComponent(ev.location);
+            loc.target = '_blank';
+            loc.rel = 'noopener';
+            loc.textContent = ev.location;
+            body.appendChild(loc);
+          }
+          if (ev.description) {
+            body.appendChild(textEl('p', 'cal-event-desc', ev.description));
+          }
+          li.appendChild(body);
+          return li;
+        }
+
+        function formatWhen(ev) {
+          if (ev.allDay) {
+            var last = addDays(ev.end, -1);
+            return sameDay(ev.start, last) ? 'All day'
+              : fmtShortDay.format(ev.start) + ' – ' + fmtShortDay.format(last);
+          }
+          if (sameDay(ev.start, ev.end)) {
+            return fmtTime.format(ev.start) + ' – ' + fmtTime.format(ev.end);
+          }
+          return fmtShortDay.format(ev.start) + ', ' + fmtTime.format(ev.start)
+            + ' – ' + fmtShortDay.format(ev.end) + ', ' + fmtTime.format(ev.end);
+        }
+
+        function setStatus(text, type) {
+          els.status.textContent = text;
+          els.status.className = 'cal-status' + (type ? ' ' + type : '');
+          els.status.hidden = !text;
+        }
+
+        // ---- Helpers -------------------------------------------------------
+        function isCurrentMonth() {
+          return view.getFullYear() === today.getFullYear()
+            && view.getMonth() === today.getMonth();
+        }
+        function eventsBetween(from, to) {
+          return events.filter(function (ev) { return ev.start < to && ev.end > from; });
+        }
+        function gridRange(month) {
+          var start = addDays(month, -month.getDay());
+          var days = month.getDay() + new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+          return { start: start, end: addDays(start, Math.ceil(days / 7) * 7) };
+        }
+        function textEl(tag, className, text) {
+          var el = document.createElement(tag);
+          if (className) el.className = className;
+          el.textContent = text;
+          return el;
+        }
+        function stripHtml(html) {
+          var doc = new DOMParser().parseFromString(
+            html.replace(/<br\s*\/?>/gi, '\n'), 'text/html');
+          return (doc.body.textContent || '').trim();
+        }
+        function parseDate(s) {
+          var p = s.split('-');
+          return new Date(+p[0], p[1] - 1, +p[2]);
+        }
+        function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+        function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+        function addMonths(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }
+        function sameDay(a, b) {
+          return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
+            && a.getDate() === b.getDate();
         }
       })();
     </script>
