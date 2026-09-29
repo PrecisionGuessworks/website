@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events — FIRST Team 1646 Precision Guessworks</title>
+    <!-- Standalone upcoming-events list, served at /calendar-embed and
+         iframed into the Canvas course homepage. Event data comes from
+         calendar.js, shared with the homepage Team Calendar.
+         Framing: GitHub Pages can't set per-path response headers, and
+         browsers ignore frame-ancestors in a <meta> CSP, so the
+         "frame-ancestors 'self' https://*.instructure.com" header has to be
+         added in front of Pages (e.g. a Cloudflare response header rule). -->
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="images/favicon/favicon-96x96.png"
+      sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="images/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet">
+    <style>
+      @font-face {
+        font-family: 'Glacial Indifference';
+        src: url('fonts/GlacialIndifference-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Glacial Indifference';
+        src: url('fonts/GlacialIndifference-Bold.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { background: #ffffff; }
+      body {
+        font-family: 'Glacial Indifference', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.45;
+        color: #3a3a3c;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .events { list-style: none; }
+      .event {
+        background: #f4f4f4;
+        border-left: 6px solid #9e0001;
+        padding: 14px 20px;
+        overflow-wrap: anywhere;
+      }
+      .event + .event { margin-top: 12px; }
+      .event h2 {
+        font-family: 'Bebas Neue', 'Impact', sans-serif;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1.1;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #222222;
+      }
+      .event-when {
+        margin-top: 4px;
+        font-weight: 700;
+        color: #9e0001;
+      }
+      .event-loc,
+      .event-desc {
+        margin-top: 6px;
+        font-size: 16px;
+        color: #3a3a3c;
+        white-space: pre-line;
+      }
+      .event-desc a { color: #9e0001; }
+
+      .status { padding: 14px 20px; }
+      .status.error { color: #9e0001; font-weight: 700; }
+      .status[hidden] { display: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 class="visually-hidden">Team 1646 Upcoming Events</h1>
+      <p class="status" id="status" role="status" aria-live="polite">Loading events…</p>
+      <ul class="events" id="events"></ul>
+    </main>
+
+    <script src="calendar.js"></script>
+    <script>
+      (function () {
+        var cal = window.TeamCalendar;
+        var MAX_EVENTS = 8;
+        var WINDOW_DAYS = 60;
+
+        var statusEl = document.getElementById('status');
+        var listEl = document.getElementById('events');
+
+        var fmtDay = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+        var fmtTime = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+
+        if (!cal.configured) {
+          showError();
+          return;
+        }
+
+        // The next MAX_EVENTS events or the next WINDOW_DAYS days, whichever
+        // is fewer.
+        var now = new Date();
+        cal.fetchEvents({
+          maxResults: MAX_EVENTS,
+          timeMin: now,
+          timeMax: new Date(now.getTime() + WINDOW_DAYS * 24 * 60 * 60 * 1000)
+        }).then(function (events) {
+          if (!events.length) {
+            setStatus('No upcoming events. Check back soon.');
+            return;
+          }
+          var frag = document.createDocumentFragment();
+          events.slice(0, MAX_EVENTS).forEach(function (ev) {
+            frag.appendChild(renderEvent(ev));
+          });
+          listEl.appendChild(frag);
+          setStatus('');
+        }, showError);
+
+        function renderEvent(ev) {
+          var li = document.createElement('li');
+          li.className = 'event';
+          li.appendChild(textEl('h2', '', ev.title));
+          li.appendChild(textEl('p', 'event-when', formatWhen(ev)));
+          if (ev.location) li.appendChild(textEl('p', 'event-loc', ev.location));
+          if (ev.description) {
+            var desc = document.createElement('p');
+            desc.className = 'event-desc';
+            desc.appendChild(cal.descriptionFragment(ev.descriptionHtml));
+            li.appendChild(desc);
+          }
+          return li;
+        }
+
+        // e.g. "Saturday, Oct 11 | 9:00 AM – 5:00 PM" or "Saturday, Oct 11 | All day"
+        function formatWhen(ev) {
+          if (ev.allDay) {
+            var last = cal.addDays(ev.end, -1);
+            return fmtDay.format(ev.start)
+              + (cal.sameDay(ev.start, last) ? '' : ' – ' + fmtDay.format(last))
+              + ' | All day';
+          }
+          if (cal.sameDay(ev.start, ev.end)) {
+            return fmtDay.format(ev.start) + ' | '
+              + fmtTime.format(ev.start) + ' – ' + fmtTime.format(ev.end);
+          }
+          return fmtDay.format(ev.start) + ' | ' + fmtTime.format(ev.start)
+            + ' – ' + fmtDay.format(ev.end) + ', ' + fmtTime.format(ev.end);
+        }
+
+        function showError() {
+          listEl.textContent = '';
+          setStatus('The calendar couldn’t load. Try refreshing the page.', 'error');
+        }
+
+        function setStatus(text, type) {
+          statusEl.textContent = text;
+          statusEl.className = 'status' + (type ? ' ' + type : '');
+          statusEl.hidden = !text;
+        }
+
+        function textEl(tag, className, text) {
+          var el = document.createElement(tag);
+          if (className) el.className = className;
+          el.textContent = text;
+          return el;
+        }
+      })();
+    </script>
+  </body>
+</html>
